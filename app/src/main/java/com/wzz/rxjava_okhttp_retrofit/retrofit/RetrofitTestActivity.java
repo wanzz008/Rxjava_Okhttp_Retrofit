@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wzz.rxjava_okhttp_retrofit.R;
 import com.wzz.rxjava_okhttp_retrofit.Api;
+import com.wzz.rxjava_okhttp_retrofit.R;
 import com.wzz.rxjava_okhttp_retrofit.bean.LoginParam;
 import com.wzz.rxjava_okhttp_retrofit.bean.User;
 
