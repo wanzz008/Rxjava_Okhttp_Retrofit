@@ -1,7 +1,7 @@
 package com.wzz.rxjava_okhttp_retrofit.rxjava;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +11,9 @@ import com.wzz.rxjava_okhttp_retrofit.R;
 import com.wzz.rxjava_okhttp_retrofit.bean.LoginParam;
 import com.wzz.rxjava_okhttp_retrofit.bean.LoginResult;
 import com.wzz.rxjava_okhttp_retrofit.bean.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -50,6 +53,50 @@ public class MapActivity extends AppCompatActivity {
                 .build();
 
         api = retrofit.create(Api.class);
+
+    }
+
+    /**
+     * 把list中的元素，一个个发送出去
+     */
+    public void fromArray(){
+
+        List<String> list = new ArrayList<>();
+        list.add("aaa");
+        list.add("bbb");
+        list.add("ccc");
+        list.add("ddd");
+        list.add("eee");
+
+        Observable.just(list)
+                .map(new Function<List<String>, String[]>() {
+                    @Override
+                    public String[] apply(List<String> strings) throws Exception {
+                        String[] aa = new String[strings.size()]; //list转为数组
+                        return strings.toArray( aa );
+                    }
+                })
+                .flatMap(new Function<String[], ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(String[] strings) throws Exception {
+                        return Observable.fromArray(strings);
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.i("wzz------", "doOnNext: " + s );
+                        Thread.sleep(3000); // 操作
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.i("wzz------", "accept: " + s );
+                    }
+                });
 
     }
 
